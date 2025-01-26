@@ -16,23 +16,30 @@ export default function RoleSelectionPage() {
       <View style={styles.rolesContainer}>
         <TouchableOpacity
           style={styles.roleButton}
-          onPress={() => router.push('/beneficiary/Signup')}
+          onPress={() => router.push('/beneficiary/Login')}
         >
-          <Text style={styles.roleText}>Signup as Seeker</Text>
+          <Text style={styles.roleText}>Login as Seeker</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.roleButton}
-          onPress={() => router.push("/Reception/Signup")}
+          onPress={() => router.push("/admin/Login")}
         >
-          <Text style={styles.roleText}>Signup as Receptionist</Text>
+          <Text style={styles.roleText}>Login as Admin</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.roleButton}
-          onPress={() => router.push("/Department Staff/Signup")}
+          onPress={() => router.push("/Reception/Login")}
         >
-          <Text style={styles.roleText}>Signup as DepartmentStaff</Text>
+          <Text style={styles.roleText}>Login as Receptionist</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.roleButton}
+          onPress={() => router.push("/Department Staff/Login")}
+        >
+          <Text style={styles.roleText}>Login as DepartmentStaff</Text>
         </TouchableOpacity>
       </View>
     </View>

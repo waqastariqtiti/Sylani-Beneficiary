@@ -18,7 +18,7 @@ const img = require('../../assets/images/Sylani_landing.jpeg');
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState(""); // New state for username
+  const [username, setUsername] = useState("");
   const router = useRouter();
 
   const handleSignup = () => {
@@ -30,7 +30,7 @@ const SignupScreen = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const userId = userCredential.user.uid;
-        console.log("User ID:", userId); // Debug User ID
+        console.log("User ID:", userId); 
         console.log("Saving to database...");
 
         const userRef = ref(database, `users/${userId}`);
@@ -41,7 +41,7 @@ const SignupScreen = () => {
           .then(() => {
             console.log("Data saved successfully!");
             Alert.alert("Success", "Account created successfully!");
-            router.push("/beneficiary/loanRequest");
+            router.push("/Reception/Deshboard");
           })
           .catch((dbError) => {
             console.error("Database Error:", dbError);
@@ -58,7 +58,7 @@ const SignupScreen = () => {
     <View style={styles.container}>
       <StatusBar backgroundColor={'black'} barStyle={'light-content'}/>
       <Image style={styles.logoImage} source={img}/>
-      <Text style={styles.title}>Create an Account for you As a Seeker!</Text>
+      <Text style={styles.title}>Create an Account for  a receptionist!</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -87,7 +87,7 @@ const SignupScreen = () => {
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/auth/Login")}>
+      <TouchableOpacity onPress={() => router.push("/Reception/Login")}>
         <Text style={styles.link}>Already have an account? Log In</Text>
       </TouchableOpacity>
     </View>

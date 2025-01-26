@@ -7,13 +7,13 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  Image
+  Image,
+  StatusBar,
 } from "react-native";
-import { getDatabase, ref, push } from "firebase/database"; // Import Firebase methods
+import { getDatabase, ref, push } from "firebase/database";
 import { router } from "expo-router";
-import { StatusBar } from "react-native";
 
-const img = require('../../assets/images/Sylani_landing.jpeg');
+const img = require("../../assets/images/Sylani_landing.jpeg");
 
 export default function LoanRequestPage() {
   const [formData, setFormData] = useState({
@@ -23,6 +23,7 @@ export default function LoanRequestPage() {
     address: "",
     guarantorCnic: "",
     purpose: "",
+    loan: "",
   });
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
@@ -37,36 +38,58 @@ export default function LoanRequestPage() {
       !formData.phone ||
       !formData.address ||
       !formData.guarantorCnic ||
-      !formData.purpose
+      !formData.purpose ||
+      !formData.loan
     ) {
       Alert.alert("Error", "All fields must be filled out.");
       return;
     }
-
+  
     // CNIC validation (should be 13 digits)
     if (formData.cnic.length !== 13 || isNaN(Number(formData.cnic))) {
       Alert.alert("Error", "CNIC should be 13 digits and must be numeric.");
       return;
     }
-
+  
+    // Guarantor CNIC validation (should be 13 digits and not the same as the user's CNIC)
+    if (
+      formData.guarantorCnic.length !== 13 ||
+      isNaN(Number(formData.guarantorCnic))
+    ) {
+      Alert.alert(
+        "Error",
+        "Guarantor's CNIC should be 13 digits and must be numeric."
+      );
+      return;
+    }
+  
+    if (formData.cnic === formData.guarantorCnic) {
+      Alert.alert(
+        "Error",
+        "The guarantor's CNIC must belong to another person."
+      );
+      return;
+    }
+  
     // Phone validation (should be numeric)
     if (isNaN(Number(formData.phone))) {
       Alert.alert("Error", "Phone number must be numeric.");
       return;
     }
-
-    // Guarantor CNIC validation (should be 13 digits)
-    if (formData.guarantorCnic.length !== 13 || isNaN(Number(formData.guarantorCnic))) {
-      Alert.alert("Error", "Guarantor's CNIC should be 13 digits and must be numeric.");
-      router.push('/beneficiary/token')
+  
+    // Loan validation (should be numeric)
+    if (isNaN(Number(formData.loan)) || Number(formData.loan) <= 0) {
+      Alert.alert("Error", "Loan amount must be a valid positive number.");
       return;
     }
-
-    // Get database instance
+  
+    // All validations passed, save to database and navigate
     const database = getDatabase();
-
-    // Save data to Firebase Realtime Database
-    push(ref(database, 'loanRequests'), formData)
+  
+    // Include status field as 'Pending' by default
+    const loanDataWithStatus = { ...formData, status: "Pending" };
+  
+    push(ref(database, "loanRequests"), loanDataWithStatus)
       .then(() => {
         Alert.alert("Form Submitted", "Your loan request has been saved successfully!");
         setFormData({
@@ -76,21 +99,22 @@ export default function LoanRequestPage() {
           address: "",
           guarantorCnic: "",
           purpose: "",
+          loan: "",
         });
+        router.push("/beneficiary/token"); // Navigate to the next screen
       })
       .catch((error) => {
         Alert.alert("Error", "There was an error saving the data: " + error.message);
       });
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <StatusBar backgroundColor={'black'} barStyle={'light-content'}/>
+      <StatusBar backgroundColor={"black"} barStyle={"light-content"} />
       <Image style={styles.logoImage} source={img} />
-      {/* Logo Bar */}
       <Text style={styles.logoText}>Sylani Welfare</Text>
 
-      {/* Instructions Bar */}
       <View style={styles.instructionsBar}>
         <Text style={styles.instructionsText}>
           Please fill out all the fields accurately. Ensure you have a valid CNIC
@@ -98,7 +122,6 @@ export default function LoanRequestPage() {
         </Text>
       </View>
 
-      {/* Form Section */}
       <View style={styles.formContainer}>
         <Text style={styles.formTitle}>Loan Request Form</Text>
 
@@ -147,6 +170,14 @@ export default function LoanRequestPage() {
           onChangeText={(text) => handleInputChange("purpose", text)}
         />
 
+        <TextInput
+          style={styles.input}
+          placeholder="Enter how much loan you want"
+          value={formData.loan}
+          onChangeText={(text) => handleInputChange("loan", text)}
+          keyboardType="numeric"
+        />
+
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Submit Loan Request</Text>
         </TouchableOpacity>
@@ -165,7 +196,7 @@ const styles = StyleSheet.create({
     color: "#008000",
     fontSize: 20,
     fontWeight: "bold",
-    position: 'absolute',
+    position: "absolute",
     top: 30,
     left: 75,
   },

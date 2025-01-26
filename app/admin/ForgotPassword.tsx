@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert,StatusBar } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, StatusBar } from "react-native";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firbase.config";
-import { useRouter } from "expo-router"; // import expo-router's useRouter
-
+import { useRouter } from "expo-router";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
 
   const handleForgotPassword = () => {
     if (!email) {
@@ -17,7 +16,7 @@ const ForgotPassword = () => {
     sendPasswordResetEmail(auth, email)
       .then(() => {
         Alert.alert("Success", "Password reset email sent!");
-        router.push("/auth/Login"); // Redirect to login screen after email is sent
+        router.push("/beneficiary/Login");
       })
       .catch((error) => {
         Alert.alert("Error", error.message);
@@ -26,7 +25,7 @@ const ForgotPassword = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={'black'} barStyle={'light-content'}/>
+      <StatusBar backgroundColor={'black'} barStyle={'light-content'} />
       <Text style={styles.title}>Forgot Password</Text>
       <TextInput
         style={styles.input}
@@ -40,7 +39,7 @@ const ForgotPassword = () => {
         <Text style={styles.buttonText}>Send Reset Link</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/auth/Login")}>
+      <TouchableOpacity onPress={() => router.push("/beneficiary/Login")}>
         <Text style={styles.link}>Back to Login</Text>
       </TouchableOpacity>
     </View>
@@ -50,7 +49,7 @@ const ForgotPassword = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#8ECAE6",
+    backgroundColor: "#008000",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
@@ -58,7 +57,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#023047",
+    color: "#ccff33",
     marginBottom: 20,
   },
   input: {
@@ -66,26 +65,26 @@ const styles = StyleSheet.create({
     padding: 15,
     marginVertical: 10,
     borderRadius: 8,
-    backgroundColor: "#219EBC",
-    color: "#FFFFFF",
+    backgroundColor: "#007BFF",
+    color: "#ccff33",
     fontSize: 16,
   },
   button: {
     width: "100%",
     padding: 15,
     borderRadius: 8,
-    backgroundColor: "#FFB703",
+    backgroundColor: "#38b000",
     alignItems: "center",
     marginTop: 20,
   },
   buttonText: {
-    color: "#FB8500",
+    color: "#007BFF",
     fontSize: 18,
     fontWeight: "bold",
   },
   link: {
     marginTop: 20,
-    color: "#023047",
+    color: "#ccff33",
     fontSize: 16,
     textDecorationLine: "underline",
   },

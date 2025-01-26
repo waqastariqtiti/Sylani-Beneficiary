@@ -21,7 +21,7 @@ export default function LandingPage() {
           <Text style={styles.cardTitle}>Login</Text>
           <Text style={styles.cardTitle}>If you have an account</Text>
           <TouchableOpacity style={styles.button}>
-          <Link href={'/signupAs'}>
+          <Link href={'/LoginAs'}>
             <Text style={styles.buttonText}>Go to Login</Text>
           </Link>
           </TouchableOpacity>
@@ -32,7 +32,7 @@ export default function LandingPage() {
           <Text style={styles.cardTitle}>Sign Up</Text>
           <Text style={styles.cardTitle}>if dont have an account</Text>
           <TouchableOpacity style={styles.button}>
-          <Link href={'/auth/Signup'}>
+          <Link href={'/SignupAs'}>
             <Text style={styles.buttonText}>Go to Signup</Text>
           </Link>
           </TouchableOpacity>
